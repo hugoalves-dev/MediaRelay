@@ -14,7 +14,7 @@ cp .env.example .env
 docker compose -f docker-compose.yml up -d --build
 ```
 
-The `.env.example` sets `COMPOSE_FILE=deploy/docker-compose.prod.yml`, so plain `docker compose up` selects the production app-only configuration without merging Compose files. The local command above explicitly selects `docker-compose.yml`, which starts the app and MinIO together and builds both images. For production, Compose uses `ghcr.io/vitorhugo-dotnet/media-relay:latest` directly; configure `MINIO_ENDPOINT` for the existing MinIO service.
+The `.env.example` sets `COMPOSE_FILE=deploy/docker-compose.prod.yml`, so plain `docker compose up` selects the production app-only configuration without merging Compose files. The local command above explicitly selects `docker-compose.yml`, which starts the app and MinIO together and builds both images. For production, Compose uses `ghcr.io/hugoalves-dev/media-relay:latest` directly; configure `MINIO_ENDPOINT` for the existing MinIO service.
 
 The local app health endpoint is `http://localhost:8080/health`; the local MinIO S3 API is on `http://localhost:9000`. The MinIO console is not published to the host. Stop the local stack with `docker compose -f docker-compose.yml down`. The named `minio-data` volume remains when containers are recreated; `down -v` deletes it.
 
@@ -52,7 +52,7 @@ Create `.env` in that directory before deploying. It must include `MINIO_ENDPOIN
 
 The local Compose file exposes only loopback ports for the app and MinIO API, keeps the console unbound, and stores MinIO data in a named volume. Production Compose exposes only the MediaRelay app; the existing MinIO service remains independently managed. Back up MinIO using the storage service's normal backup process.
 
-GitHub Actions runs the .NET restore/build/test checks and a Docker build for pull requests without GHCR login or production secrets. A successful push to `main` publishes `ghcr.io/vitorhugo-dotnet/media-relay:sha-<commit-sha>` and `:latest`, then pulls and deploys `:latest` through the protected `production` environment after publishing succeeds. The workflow copies `deploy/docker-compose.prod.yml` and `deploy/deploy.sh` directly into the root of `VPS_DEPLOY_PATH`, beside the production `.env`; it does not build or manage MinIO during deployment. Keep the production `.env` on the VPS.
+GitHub Actions runs the .NET restore/build/test checks and a Docker build for pull requests without GHCR login or production secrets. A successful push to `main` publishes `ghcr.io/hugoalves-dev/media-relay:sha-<commit-sha>` and `:latest`, then pulls and deploys `:latest` through the protected `production` environment after publishing succeeds. The workflow copies `deploy/docker-compose.prod.yml` and `deploy/deploy.sh` directly into the root of `VPS_DEPLOY_PATH`, beside the production `.env`; it does not build or manage MinIO during deployment. Keep the production `.env` on the VPS.
 
 Set the GHCR package visibility to **Public** so the VPS can pull images without a registry credential. The deployment script intentionally uses the VPS's existing Docker login state and does not transfer a registry token.
 

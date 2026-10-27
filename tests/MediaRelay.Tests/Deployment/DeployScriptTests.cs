@@ -14,7 +14,7 @@ public sealed class DeployScriptTests
             var result = await RunScript(fixture);
 
             Assert.Equal(0, result.ExitCode);
-            Assert.Contains("ghcr.io/vitorhugo-dotnet/media-relay:latest", result.StandardOutput, StringComparison.Ordinal);
+            Assert.Contains("ghcr.io/hugoalves-dev/media-relay:latest", result.StandardOutput, StringComparison.Ordinal);
             Assert.DoesNotContain(uploadKey, result.StandardOutput + result.StandardError, StringComparison.Ordinal);
             var dockerCalls = File.ReadAllLines(fixture.DockerLog);
             var composeCalls = dockerCalls.Where(call => call.StartsWith("compose ", StringComparison.Ordinal)).ToArray();
@@ -36,14 +36,14 @@ public sealed class DeployScriptTests
     [Fact]
     public async Task ObsoleteImageVariablesDoNotOverrideLatestFromCompose()
     {
-        var image = $"ghcr.io/vitorhugo-dotnet/media-relay:sha-{new string('c', 40)}";
+        var image = $"ghcr.io/hugoalves-dev/media-relay:sha-{new string('c', 40)}";
         var fixture = CreateFixture("IMAGE=media-relay:local\n" + ValidEnvironment("private-upload-key-for-test"));
         try
         {
             var result = await RunScript(fixture, image);
 
             Assert.Equal(0, result.ExitCode);
-            Assert.Contains("ghcr.io/vitorhugo-dotnet/media-relay:latest", result.StandardOutput, StringComparison.Ordinal);
+            Assert.Contains("ghcr.io/hugoalves-dev/media-relay:latest", result.StandardOutput, StringComparison.Ordinal);
             Assert.DoesNotContain(image, result.StandardOutput, StringComparison.Ordinal);
             Assert.Equal(4, File.ReadAllLines(fixture.DockerLog).Length);
         }
@@ -56,7 +56,7 @@ public sealed class DeployScriptTests
     [Fact]
     public async Task RemovesExistingNamedContainerBeforeStartingReplacement()
     {
-        var image = $"ghcr.io/vitorhugo-dotnet/media-relay:sha-{new string('b', 40)}";
+        var image = $"ghcr.io/hugoalves-dev/media-relay:sha-{new string('b', 40)}";
         var fixture = CreateFixture($"IMAGE={image}\n" + ValidEnvironment("private-upload-key-for-test"));
         try
         {
@@ -77,16 +77,16 @@ public sealed class DeployScriptTests
 
     [Theory]
     [InlineData("bad-image")]
-    [InlineData("ghcr.io/vitorhugo-dotnet/media-relay:latest")]
+    [InlineData("ghcr.io/hugoalves-dev/media-relay:latest")]
     public async Task IgnoresObsoleteProcessImageAndRunsCompose(string image)
     {
-        var fixture = CreateFixture($"IMAGE=ghcr.io/vitorhugo-dotnet/media-relay:sha-{new string('d', 40)}\n" + ValidEnvironment("private-upload-key-for-test"));
+        var fixture = CreateFixture($"IMAGE=ghcr.io/hugoalves-dev/media-relay:sha-{new string('d', 40)}\n" + ValidEnvironment("private-upload-key-for-test"));
         try
         {
             var result = await RunScript(fixture, image);
 
             Assert.Equal(0, result.ExitCode);
-            Assert.Contains("ghcr.io/vitorhugo-dotnet/media-relay:latest", result.StandardOutput, StringComparison.Ordinal);
+            Assert.Contains("ghcr.io/hugoalves-dev/media-relay:latest", result.StandardOutput, StringComparison.Ordinal);
             Assert.Equal(4, File.ReadAllLines(fixture.DockerLog).Length);
         }
         finally
@@ -104,7 +104,7 @@ public sealed class DeployScriptTests
     [InlineData("DISCORD_APPLICATION_ID", "replace-with-discord-app-id", true)]
     public async Task RejectsBlankOrExampleRequiredValuesWithoutPrintingThem(string key, string value, bool discordEnabled)
     {
-        var image = $"ghcr.io/vitorhugo-dotnet/media-relay:sha-{new string('e', 40)}";
+        var image = $"ghcr.io/hugoalves-dev/media-relay:sha-{new string('e', 40)}";
         var fixture = CreateFixture($"IMAGE={image}\n" + ValidEnvironment("private-upload-key-for-test", discordEnabled, key, value));
         try
         {

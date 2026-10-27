@@ -62,4 +62,4 @@ if docker container inspect mediarelay-app >/dev/null 2>&1; then
   docker rm -f mediarelay-app
 fi
 docker compose --env-file "$env_file" -f "$compose_file" up -d app
-printf '%s\n' 'MediaRelay deployment is running with ghcr.io/vitorhugo-dotnet/media-relay:latest.'
+printf '%s\n' 'MediaRelay deployment is running with ghcr.io/hugoalves-dev/media-relay:latest.'

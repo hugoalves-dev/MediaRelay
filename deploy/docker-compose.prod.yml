@@ -1,6 +1,6 @@
 services:
   app:
-    image: ghcr.io/vitorhugo-dotnet/media-relay:latest
+    image: ghcr.io/hugoalves-dev/media-relay:latest
     container_name: mediarelay-app
     restart: unless-stopped
     environment:

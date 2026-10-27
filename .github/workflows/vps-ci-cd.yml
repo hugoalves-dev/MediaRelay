@@ -96,8 +96,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/vitorhugo-dotnet/media-relay:sha-${{ github.sha }}
-            ghcr.io/vitorhugo-dotnet/media-relay:latest
+            ghcr.io/hugoalves-dev/media-relay:sha-${{ github.sha }}
+            ghcr.io/hugoalves-dev/media-relay:latest
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.revision=${{ github.sha }}

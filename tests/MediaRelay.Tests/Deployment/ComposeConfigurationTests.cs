@@ -35,7 +35,7 @@ public sealed class ComposeConfigurationTests
         Assert.Equal("filestorage-minio:9000", app.GetProperty("environment").GetProperty("MINIO_ENDPOINT").GetString());
         Assert.Equal("false", app.GetProperty("environment").GetProperty("MINIO_USE_SSL").GetString());
         Assert.Equal("true", app.GetProperty("environment").GetProperty("MINIO_PUBLIC_USE_SSL").GetString());
-        Assert.Equal("ghcr.io/vitorhugo-dotnet/media-relay:latest", app.GetProperty("image").GetString());
+        Assert.Equal("ghcr.io/hugoalves-dev/media-relay:latest", app.GetProperty("image").GetString());
         Assert.False(app.TryGetProperty("build", out _));
         Assert.False(app.TryGetProperty("depends_on", out _));
     }
